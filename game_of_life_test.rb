@@ -50,4 +50,47 @@ class GameOfLifeTest < Test::Unit::TestCase
     assert_equal after, [[1,1,1],[1,1,1],[1,1,1]]
   end
 
+  def test_neighbours
+    @game.state = [[0,0,0,0,0],
+                   [0,1,1,1,0],
+                   [0,1,0,1,0],
+                   [0,1,1,1,0],
+                   [0,0,0,0,0]]
+    assert_equal @game.neighbours(2,2), [1,1,1,1,1,1,1,1]
+  end
+
+  def test_neighbours_fold
+    @game.state = [[0,1,0,0,1],
+                   [1,1,0,0,1],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [1,1,0,0,1]]
+    assert_equal @game.neighbours(0,0), [1,1,1,1,1,1,1,1]
+  end
+
+  def test_nb_neighbours_alive
+    @game.state = [[0,1,0,0,1],
+                   [1,1,0,0,1],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [1,1,0,0,1]]
+    assert_equal @game.nb_neighbours_alive(0,0), 8
+  end
+
+  def test_should_be_dead
+    @game.state = [[0,0,0,0,0],
+                   [0,0,0,0,0],
+                   [0,1,1,0,0],
+                   [0,0,0,0,0],
+                   [0,0,0,0,0]]
+    after = @game.evolve
+    assert_equal after, [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+  end
+
+  def test_should_stay_dead
+    @game.state = [[0,0,0],[0,0,0],[0,0,0]]
+    after = @game.evolve
+    assert_equal after, [[0,0,0],[0,0,0],[0,0,0]]
+  end
+
 end
